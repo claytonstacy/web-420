@@ -1,3 +1,17 @@
+/*
+============================================
+Title: Assignment 1.4
+Author: Professor Krasso
+Date: 3 May 2020
+Modified By: Clayton Stacy
+Description: API Gateway Part 1
+============================================
+*/ 
+//Start program
+//Import header and log to the console
+var header = require('../Stacy-header');
+console.log(header.display('Clayton', 'Stacy', '1.4 API Gateway Part 1' ));
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
