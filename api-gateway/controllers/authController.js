@@ -16,7 +16,6 @@ var config = require('../config');
 
 // Register a new user on POST
 exports.user_register = function(req, res) {
-  console.log('In the user register', JSON.stringify(req.body))
   var hashedPassword = bcrypt.hashSync(req.body.password, 8);
   var newUser = new User({
     username: req.body.username,
@@ -27,11 +26,12 @@ exports.user_register = function(req, res) {
     if (err)
     return res.status(500).send('There was a problem registering the user');
 
-    var token = jwt.sign({ id: user._id}, confif.web.secret, {
+    var token = jwt.sign({ id: user._id}, config.web.secret, {
       expiresIn: 86400
-    })
-  })
- res.stateus(200).send({ auth: true, token: token });
+    });
+    res.status(200).send({ auth: true, token: token });
+  });
+
 };
 // Verify token on GET
 exports.user_token = function(req, res) {
