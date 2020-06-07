@@ -47,3 +47,22 @@ exports.user_token = function(req, res) {
     });
   });
 };
+
+exports.user_login = function(req, res) {
+  User.findOne({ email: req.body.email }, function(err, user) {
+    if (err) return res.status(500).send('Error on server');
+    if (!user) return res.status(404).send('No user found.');
+    console.log('These are the passwords', user.password, req.body.password);
+    var passwordIsValid = bcrypt.compare(req.body.password, user.password);
+    console.log('This is the result', passwordIsValid);
+    if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+    var token = jwt.sign({ id: user._id}, config.web.secret, {
+      expiresIn: 86400
+    });
+    res.status(200).send( { auth: true, token: token });
+  })
+};
+
+exports.user_logout = function(req, res) {
+  res.status(200).send({ auth: false, token: null});
+};

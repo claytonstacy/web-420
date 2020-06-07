@@ -23,7 +23,7 @@ var apiCatalog = require('./routes/api-catalog');
 var indexRouter = require('./routes/index');
 
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb+srv://admin:admin@buwebdev-cluster-1-xyv9m.mongodb.net/test?retryWrites=true&w=majority', {
+mongoose.connect('mongodb://localhost:27017/test?retryWrites=true&w=majority', {
 promiseLibrary: require('bluebird'),
 useNewUrlParser: true,
 useUnifiedTopology: true
