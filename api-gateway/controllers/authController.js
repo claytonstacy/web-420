@@ -35,16 +35,11 @@ exports.user_register = function(req, res) {
 };
 // Verify token on GET
 exports.user_token = function(req, res) {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ auth: false, message: 'No token provided'});
-  jwt.verify(token, config.web.secret, function(err, decoded) {
-    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate the user.'});
-    User.findById(decoded.id, function(err, user) {
-      if (err) return res.status(500).send('There was a problem finding the user.');
-      if(!user) return res.status(404).send('No user found');
+  User.findById(decoded.id, function(err, user) {
+    if (err) return res.status(500).send('There was a problem finding the user.');
+    if(!user) return res.status(404).send('No user found');
 
-      res.status(200).send(user);
-    });
+    res.status(200).send(user);
   });
 };
 
@@ -52,9 +47,7 @@ exports.user_login = function(req, res) {
   User.findOne({ email: req.body.email }, function(err, user) {
     if (err) return res.status(500).send('Error on server');
     if (!user) return res.status(404).send('No user found.');
-    console.log('These are the passwords', user.password, req.body.password);
     var passwordIsValid = bcrypt.compare(req.body.password, user.password);
-    console.log('This is the result', passwordIsValid);
     if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
     var token = jwt.sign({ id: user._id}, config.web.secret, {
       expiresIn: 86400
